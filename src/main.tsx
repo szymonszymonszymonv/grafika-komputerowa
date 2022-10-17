@@ -1,20 +1,30 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
+import { RouterProvider, Route, createBrowserRouter } from 'react-router-dom'
+import App from './pages/App'
 import 'styles/index.css'
+import Gk1 from './pages/Gk-1'
 
-/**
- * If you enables use of Node.js API in the Renderer-process
- * ```
- * npm i -D vite-plugin-electron-renderer
- * ```
- * @see - https://github.com/electron-vite/vite-plugin-electron/tree/main/packages/electron-renderer#electron-renderervite-serve
- */
-// import './samples/node-api'
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/gk-1",
+        element: <Gk1 />
+      },
+      {
+        path: "/gk-2",
+        element: <Gk1 />
+      }
+    ]
+  },
+])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 )
 
