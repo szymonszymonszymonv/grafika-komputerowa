@@ -4,6 +4,7 @@ import { RouterProvider, Route, createBrowserRouter } from 'react-router-dom'
 import App from './pages/App'
 import 'styles/index.css'
 import Gk1 from './pages/Gk-1'
+import Gk2 from './pages/Gk-2'
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/gk-2",
-        element: <Gk1 />
+        element: <Gk2 />
       }
     ]
   },
