@@ -25,10 +25,9 @@ const Gk2 = (props: Props) => {
             file: file,
             maxSize: imgSizeCompress
         }
-        const result = await resizeImage(config);
         console.log(file)
         if(file.type === "image/jpeg") {
-            console.log('no')
+            const result = await resizeImage(config);
             setImgUrl(URL.createObjectURL(result as Blob))
         }
         var reader = new FileReader();
