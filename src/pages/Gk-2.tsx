@@ -126,18 +126,20 @@ const Gk2 = (props: Props) => {
 
         let x = words.slice(4);
         const context = canvasRef.current.getContext('2d')
-        for (let i = 0; i < words[1]; i++) {
+        console.log(words[1])
+        console.log(words[2])
+        for (let i = 0; i < words[2]; i++) {
             // console.log("cord x: " + i);
-            for (let j = 0; j < words[2]; j++) {
+            for (let j = 0; j < words[1]; j++) {
                 // console.log("cord y: " + j);
                 let colorHex = rgbHex(
-                    parseInt(x[i*words[1] + j*3]),
-                    parseInt(x[i*words[1] + j*3 + 1]),
-                    parseInt(x[i*words[1] + j*3 + 2])
+                    parseInt(x[words[1]*i*3 + j*3]),
+                    parseInt(x[words[1]*i*3 + j*3 + 1]),
+                    parseInt(x[words[1]*i*3 + j*3 + 2])
                 );
-                // console.log(colorHex)
+                // console.log(words[1]*i*3 + j*3)
                 
-                strokeRectangle(context, i, j, 1, 1, colorHex);
+                strokeRectangle(context, j, i, 1, 1, colorHex);
             }
         }
         // console.log("end drawing");
