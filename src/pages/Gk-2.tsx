@@ -79,22 +79,22 @@ const Gk2 = (props: Props) => {
     };
 
     const strokeRectangle = (
-        canvasRef: any,
+        context: any,
         ax: number,
         ay: number,
         bx: number,
         by: number,
         color: string
     ) => {
-        const canvas = canvasRef.current;
-        const context = canvas.getContext("2d");
         // context!.strokeStyle = color;
-
-        context.fillStyle = color; //not working (always black)
-        // context?.beginPath();
-        // context.rect(ax, ay, bx, by);
-        // context?.stroke();
-        context.fillRect(ax, ay, bx, by);
+        try {
+            context!.fillStyle = `#${color}`; //not working (always black)
+            // console.log(`${ax}, ${ay}`)
+            context.fillRect(ax, ay, bx, by);
+        }
+        catch {
+            // console.log('cos nietak')
+        }
     };
 
     const downloadFileAsJpeg = () => {
@@ -122,31 +122,33 @@ const Gk2 = (props: Props) => {
         // }
         // console.log("end drawing");
         const words = ppmAsString.split(/[\n ]+/);
-        console.log("drawing");
+        // console.log("drawing");
 
         let x = words.slice(4);
+        const context = canvasRef.current.getContext('2d')
         for (let i = 0; i < words[1]; i++) {
-            console.log("cord x: " + i);
+            // console.log("cord x: " + i);
             for (let j = 0; j < words[2]; j++) {
-                console.log("cord y: " + j);
+                // console.log("cord y: " + j);
                 let colorHex = rgbHex(
-                    parseInt(x[i + j]),
-                    parseInt(x[i + j + 1]),
-                    parseInt(x[i + j + 2])
+                    parseInt(x[i*words[1] + j*3]),
+                    parseInt(x[i*words[1] + j*3 + 1]),
+                    parseInt(x[i*words[1] + j*3 + 2])
                 );
+                // console.log(colorHex)
                 
-                console.log("color hex " + colorHex);
-                strokeRectangle(canvasRef, i, j, 1, 1, colorHex);
+                strokeRectangle(context, i, j, 1, 1, colorHex);
             }
         }
-        console.log("end drawing");
+        // console.log("end drawing");
     };
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext("2d");
-        context.canvas.width = 500;
-        context.canvas.height = 500;
+        context.canvas.width = 800;
+        context.canvas.height = 800;
+        strokeRectangle(context, 0, 0, 20, 20, "#000000")
     }, []);
 
     return (
