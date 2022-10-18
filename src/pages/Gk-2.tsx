@@ -2,7 +2,7 @@ import Canvas from "@/components/Canvas";
 import Line from "@/components/Line";
 import React, { useEffect, useRef, useState } from "react";
 import rgbHex from "rgb-hex";
-
+import { resizeImage, IResizeImageOptions } from '../libs/resizeImage'
 type Props = {};
 
 const Gk2 = (props: Props) => {
@@ -13,12 +13,24 @@ const Gk2 = (props: Props) => {
     const [ppmHeight, setPpmHeight] = useState(0);
     const [ppmMaxColorValue, setPpmMaxColorValue] = useState("");
     const [ppmData, setPpmData] = useState("");
+    const [imgUrl, setImgUrl] = useState("");
+    const [imgSizeCompress, setImgSizeCompress] = useState(90);
     const canvasRef = useRef<any>(null!);
 
-    const uploadFile = (event: any) => {
+    const uploadFile = async (event: any) => {
         setSelectedFile(event.target.files[0]);
 
         var file = event.target.files[0];
+        let config = {
+            file: file,
+            maxSize: imgSizeCompress
+        }
+        const result = await resizeImage(config);
+        console.log(file)
+        if(file.type === "image/jpeg") {
+            console.log('no')
+            setImgUrl(URL.createObjectURL(result as Blob))
+        }
         var reader = new FileReader();
         reader.onload = function () {
             setPpmAsString(reader.result);
@@ -83,6 +95,10 @@ const Gk2 = (props: Props) => {
         context?.stroke();
     };
 
+    const downloadFileAsJpeg = () => {
+
+    }
+
     // const drawRectangle = () => {
     //     strokeRectangle(canvasRef, paramAx, paramAy, paramBx, paramBy, color);
     // };
@@ -111,8 +127,18 @@ const Gk2 = (props: Props) => {
             <canvas ref={canvasRef}></canvas>
             <input type="file" name="file" onChange={uploadFile} />
             <div>
+                <span>compression</span>
+                <input type="range" min={0} max={100} value={imgSizeCompress} onChange={(e) => setImgSizeCompress(parseInt(e.target.value))}></input>
+                <span>{imgSizeCompress}</span>
+            </div>
+            <div>
                 <button onClick={handleSubmission}>Submit</button>
             </div>
+            <div>
+                <a download href={imgUrl}>download</a>
+            </div>
+            <img src={imgUrl}></img>
+            
             {/* <img src={ppmAsString} /> */}
         </div>
     );
