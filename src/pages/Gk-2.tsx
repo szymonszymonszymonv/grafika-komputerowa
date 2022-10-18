@@ -46,7 +46,7 @@ const Gk2 = (props: Props) => {
         // console.log(xd2);
 
         const words = ppmAsString.split(/[\n ]+/);
-        console.log(words)
+        console.log(words);
         setPpmFormat(words[0]);
         console.log(words[0]);
         setPpmWidth(words[1]);
@@ -64,6 +64,7 @@ const Gk2 = (props: Props) => {
 
         formData.append("File", selectedFile!);
         splitPpm();
+        draw();
     };
 
     const strokeRectangle = (
@@ -76,42 +77,66 @@ const Gk2 = (props: Props) => {
     ) => {
         const canvas = canvasRef.current;
         const context = canvas.getContext("2d");
-        context!.strokeStyle = "#000000";
+        // context!.strokeStyle = color;
 
-        context?.beginPath();
-        context.rect(ax, ay, bx, by);
-        context?.stroke();
+        context.fillStyle = color; //not working (always black)
+        // context?.beginPath();
+        // context.rect(ax, ay, bx, by);
+        // context?.stroke();
+        context.fillRect(ax, ay, bx, by);
     };
 
-    // const drawRectangle = () => {
-    //     strokeRectangle(canvasRef, paramAx, paramAy, paramBx, paramBy, color);
-    // };
+    const draw = () => {
+        // console.log("drawing");
+        // console.log(ppmWidth);
+        // for (let i = 0; i < ppmWidth; i++) {
+        //     console.log(i);
+        //     for (let j = 0; j < ppmHeight; j++) {
+        //         console.log(j);
+        //         let colorHex = rgbHex(
+        //             parseInt(ppmData[i + j]),
+        //             parseInt(ppmData[i + j + 1]),
+        //             parseInt(ppmData[i + j + 2])
+        //         );
+        //         console.log(colorHex);
+        //         strokeRectangle(canvasRef, i, j, 1, 1, colorHex);
+        //     }
+        // }
+        // console.log("end drawing");
+        const words = ppmAsString.split(/[\n ]+/);
+        console.log("drawing");
+
+        let x = words.slice(4);
+        for (let i = 0; i < words[1]; i++) {
+            console.log("cord x: " + i);
+            for (let j = 0; j < words[2]; j++) {
+                console.log("cord y: " + j);
+                let colorHex = rgbHex(
+                    parseInt(x[i + j]),
+                    parseInt(x[i + j + 1]),
+                    parseInt(x[i + j + 2])
+                );
+                
+                console.log("color hex " + colorHex);
+                strokeRectangle(canvasRef, i, j, 1, 1, colorHex);
+            }
+        }
+        console.log("end drawing");
+    };
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext("2d");
-        context.canvas.width = ppmWidth;
-        context.canvas.height = ppmHeight;
-        for (let i = 0; i < ppmWidth; i++) {
-            for (let j = 0; j < ppmHeight; j++) {
-                let colorHex = rgbHex(
-                    parseInt(ppmData[i + j]),
-                    parseInt(ppmData[i + j + 1]),
-                    parseInt(ppmData[i + j + 2])
-                );
-                console.log(colorHex);
-                strokeRectangle(canvasRef, i, j, 1, 1, colorHex);
-            }
-        }
+        context.canvas.width = 500;
+        context.canvas.height = 500;
     }, []);
 
     return (
         <div>
-            <p> test </p>
             <canvas ref={canvasRef}></canvas>
-            <input type="file" name="file" onChange={uploadFile} />
+            <input type="file" name="file" onChange={(e) => uploadFile(e)} />
             <div>
-                <button onClick={handleSubmission}>Submit</button>
+                <button onClick={() => handleSubmission()}>Submit</button>
             </div>
             {/* <img src={ppmAsString} /> */}
         </div>
@@ -119,4 +144,3 @@ const Gk2 = (props: Props) => {
 };
 
 export default Gk2;
-
