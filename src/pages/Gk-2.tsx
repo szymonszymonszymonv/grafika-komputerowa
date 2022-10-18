@@ -2,7 +2,7 @@ import Canvas from "@/components/Canvas";
 import Line from "@/components/Line";
 import React, { useEffect, useRef, useState } from "react";
 import rgbHex from "rgb-hex";
-import { resizeImage, IResizeImageOptions } from '../libs/resizeImage'
+import { resizeImage, IResizeImageOptions } from "../libs/resizeImage";
 type Props = {};
 
 const Gk2 = (props: Props) => {
@@ -23,12 +23,12 @@ const Gk2 = (props: Props) => {
         var file = event.target.files[0];
         let config = {
             file: file,
-            maxSize: imgSizeCompress
-        }
-        console.log(file)
-        if(file.type === "image/jpeg") {
+            maxSize: imgSizeCompress,
+        };
+        console.log(file);
+        if (file.type === "image/jpeg") {
             const result = await resizeImage(config);
-            setImgUrl(URL.createObjectURL(result as Blob))
+            setImgUrl(URL.createObjectURL(result as Blob));
         }
         var reader = new FileReader();
         reader.onload = function () {
@@ -91,15 +91,12 @@ const Gk2 = (props: Props) => {
             context!.fillStyle = `#${color}`; //not working (always black)
             // console.log(`${ax}, ${ay}`)
             context.fillRect(ax, ay, bx, by);
-        }
-        catch {
+        } catch {
             // console.log('cos nietak')
         }
     };
 
-    const downloadFileAsJpeg = () => {
-
-    }
+    const downloadFileAsJpeg = () => {};
 
     // const drawRectangle = () => {
     //     strokeRectangle(canvasRef, paramAx, paramAy, paramBx, paramBy, color);
@@ -121,24 +118,37 @@ const Gk2 = (props: Props) => {
         //     }
         // }
         // console.log("end drawing");
+
         const words = ppmAsString.split(/[\n ]+/);
         // console.log("drawing");
+        // if (words[0] === "P6") {
+        //     let asciToString = words.charCodeAt(0);
+        //     console.log(asciToString);
+        // }
 
         let x = words.slice(4);
-        const context = canvasRef.current.getContext('2d')
-        console.log(words[1])
-        console.log(words[2])
+        if (words[0] === "P6") {
+            x = words.slice(4).toString().split("");
+        }
+
+        console.log(x);
+        const context = canvasRef.current.getContext("2d");
+        console.log(words[1]);
+        console.log(words[2]);
         for (let i = 0; i < words[2]; i++) {
             // console.log("cord x: " + i);
             for (let j = 0; j < words[1]; j++) {
+                // if (words[0] === "P6") {
+                //     console.log(x[1].charCodeAt(0));
+                // }
                 // console.log("cord y: " + j);
                 let colorHex = rgbHex(
-                    parseInt(x[words[1]*i*3 + j*3]),
-                    parseInt(x[words[1]*i*3 + j*3 + 1]),
-                    parseInt(x[words[1]*i*3 + j*3 + 2])
+                    parseInt(x[words[1] * i * 3 + j * 3]),
+                    parseInt(x[words[1] * i * 3 + j * 3 + 1]),
+                    parseInt(x[words[1] * i * 3 + j * 3 + 2])
                 );
                 // console.log(words[1]*i*3 + j*3)
-                
+
                 strokeRectangle(context, j, i, 1, 1, colorHex);
             }
         }
@@ -150,7 +160,7 @@ const Gk2 = (props: Props) => {
         const context = canvas.getContext("2d");
         context.canvas.width = 800;
         context.canvas.height = 800;
-        strokeRectangle(context, 0, 0, 20, 20, "#000000")
+        strokeRectangle(context, 0, 0, 20, 20, "#000000");
     }, []);
 
     return (
@@ -159,18 +169,26 @@ const Gk2 = (props: Props) => {
             <input type="file" name="file" onChange={(e) => uploadFile(e)} />
             <div>
                 <span>compression</span>
-                <input type="range" min={0} max={100} value={imgSizeCompress} onChange={(e) => setImgSizeCompress(parseInt(e.target.value))}></input>
+                <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    value={imgSizeCompress}
+                    onChange={(e) =>
+                        setImgSizeCompress(parseInt(e.target.value))
+                    }
+                ></input>
                 <span>{imgSizeCompress}</span>
             </div>
             <div>
                 <button onClick={() => handleSubmission()}>Submit</button>
             </div>
             <div>
-                <a download href={imgUrl}>download</a>
+                <a download href={imgUrl}>
+                    download
+                </a>
             </div>
             <img src={imgUrl}></img>
-            
-            {/* <img src={ppmAsString} /> */}
         </div>
     );
 };
