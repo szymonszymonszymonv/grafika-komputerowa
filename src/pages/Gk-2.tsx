@@ -18,13 +18,18 @@ const Gk2 = (props: Props) => {
     const canvasRef = useRef<any>(null!);
 
     const uploadFile = async (event: any) => {
-        setSelectedFile(event.target.files[0]);
-
+        
         var file = event.target.files[0];
+        if(file.type !== "image/jpeg" && !file.name.includes(".ppm")) { 
+            return;
+         }
+
         let config = {
             file: file,
             maxSize: imgSizeCompress,
         };
+
+        setSelectedFile(file);
         console.log(file);
         if (file.type === "image/jpeg") {
             const result = await resizeImage(config);
@@ -160,7 +165,7 @@ const Gk2 = (props: Props) => {
         const context = canvas.getContext("2d");
         context.canvas.width = 800;
         context.canvas.height = 800;
-        strokeRectangle(context, 0, 0, 20, 20, "#000000");
+        // strokeRectangle(context, 0, 0, 20, 20, "#000000");
     }, []);
 
     return (

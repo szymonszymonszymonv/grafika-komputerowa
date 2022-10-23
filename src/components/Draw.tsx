@@ -93,9 +93,9 @@ function Draw({ canvasRef }: Props) {
     canvasRef.current.addEventListener('mouseup', onMouseUp)
     return () => {
       console.log('destroying')
-      // canvasRef.current.removeEventListener('mousedown', onMouseDown)
-      // canvasRef.current.removeEventListener('mousemove', onMouseMove)
-      // canvasRef.current.removeEventListener('mouseup', onMouseUp)
+      canvasRef.current.removeEventListener('mousedown', onMouseDown)
+      canvasRef.current.removeEventListener('mousemove', onMouseMove)
+      canvasRef.current.removeEventListener('mouseup', onMouseUp)
     }
   }, [activeTool, startX, startY, isDrawing])
 
