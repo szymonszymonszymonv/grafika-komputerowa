@@ -80,7 +80,7 @@ function ColorPicker({}: Props) {
             setColorC(parseInt(e.target.value))
             setManualCMYKChanged(manualCMYKChanged * (-1))
           }}></input>
-          <input type="number" className={styles.cmyk} value={colorC} onChange=
+          <input type="number" min={0} max={100} className={styles.cmyk} value={colorC} onChange=
           {(e) => {
             setColorC(parseInt(e.target.value))
             setManualCMYKChanged(manualCMYKChanged * (-1))
@@ -93,7 +93,7 @@ function ColorPicker({}: Props) {
             setColorM(parseInt(e.target.value))
             setManualCMYKChanged(manualCMYKChanged * (-1))
           }}></input>
-          <input type="number"className={styles.cmyk} value={colorM} onChange=
+          <input type="number" min={0} max={100} className={styles.cmyk} value={colorM} onChange=
           {(e) => {
             setColorM(parseInt(e.target.value))
             setManualCMYKChanged(manualCMYKChanged * (-1))
@@ -107,7 +107,7 @@ function ColorPicker({}: Props) {
             setColorY(parseInt(e.target.value))
             setManualCMYKChanged(manualCMYKChanged * (-1))
           }}></input>
-          <input type="number"className={styles.cmyk} value={colorY} onChange=
+          <input type="number" min={0} max={100} className={styles.cmyk} value={colorY} onChange=
           {(e) => {
             setColorY(parseInt(e.target.value))
             setManualCMYKChanged(manualCMYKChanged * (-1))
@@ -120,7 +120,7 @@ function ColorPicker({}: Props) {
             setColorK(parseInt(e.target.value))
             setManualCMYKChanged(manualCMYKChanged * (-1))
           }}></input>
-          <input type="number"className={styles.cmyk} value={colorK} onChange=
+          <input type="number" min={0} max={100} className={styles.cmyk} value={colorK} onChange=
           {(e) => {
             setColorK(parseInt(e.target.value))
             setManualCMYKChanged(manualCMYKChanged * (-1))
@@ -137,7 +137,7 @@ function ColorPicker({}: Props) {
             setColorR(parseInt(e.target.value))
             setManualRGBChanged(manualRGBChanged * (-1))
           }}></input>
-          <input type="number" className={styles.cmyk} value={colorR} onChange=
+          <input type="number" min={0} max={255} className={styles.cmyk} value={colorR} onChange=
           {(e) => {
             setColorR(parseInt(e.target.value))
             setManualRGBChanged(manualRGBChanged * (-1))
@@ -150,7 +150,7 @@ function ColorPicker({}: Props) {
             setColorG(parseInt(e.target.value))
             setManualRGBChanged(manualRGBChanged * (-1))
           }}></input>
-          <input type="number"className={styles.cmyk} value={colorG} onChange=
+          <input type="number" min={0} max={255} className={styles.cmyk} value={colorG} onChange=
           {(e) => {
             setColorG(parseInt(e.target.value))
             setManualRGBChanged(manualRGBChanged * (-1))
@@ -163,7 +163,7 @@ function ColorPicker({}: Props) {
             setColorB(parseInt(e.target.value))
             setManualRGBChanged(manualRGBChanged * (-1))
           }}></input>
-          <input type="number"className={styles.cmyk} value={colorB} onChange=
+          <input type="number" min={0} max={255} className={styles.cmyk} value={colorB} onChange=
           {(e) => {
             setColorB(parseInt(e.target.value))
             setManualRGBChanged(manualRGBChanged * (-1))
