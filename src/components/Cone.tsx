@@ -23,7 +23,7 @@ function Cone({}: Props) {
         return frame;
     };
 
-    const geometryCone = new THREE.ConeGeometry(1, 1, 5);
+    const geometryCone = new THREE.ConeGeometry(1, 1, 360);
     const materialCone = new THREE.MeshBasicMaterial({ color: "#FFF000" });
     const cone = new THREE.Mesh(geometryCone, materialCone);
     cone.add(Frame(cone));
