@@ -5,7 +5,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 type Props = {};
 
-function Cube({}: Props) {
+function Cone({}: Props) {
     const sceneRef = useRef<HTMLDivElement>(null);
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -23,22 +23,13 @@ function Cube({}: Props) {
         return frame;
     };
 
-    // const geometryCone = new THREE.ConeGeometry(1, 1, 5);
-    // const materialCone = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-    // const cone = new THREE.Mesh(geometryCone, materialCone);
-    // cone.translateZ(5);
-    // cone.add(Frame(cone));
-    // scene.add(cone);
+    const geometryCone = new THREE.ConeGeometry(1, 1, 5);
+    const materialCone = new THREE.MeshBasicMaterial({ color: "#FFF000" });
+    const cone = new THREE.Mesh(geometryCone, materialCone);
+    cone.add(Frame(cone));
+    scene.add(cone);
 
     const renderer = new THREE.WebGLRenderer();
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: "#FF0000" });
-    const cube = new THREE.Mesh(geometry, material);
-
-    cube.rotation.x = 0.2;
-    cube.rotation.y = 0.2;
-    cube.add(Frame(cube));
-    scene.add(cube);
 
     camera.position.z = 5;
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -61,4 +52,4 @@ function Cube({}: Props) {
     return <div ref={sceneRef}></div>;
 }
 
-export default Cube;
+export default Cone;

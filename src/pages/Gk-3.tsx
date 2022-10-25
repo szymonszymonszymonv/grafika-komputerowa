@@ -13,6 +13,7 @@ function Gk3({}: Props) {
       <ul>
         <li><Link to="color-picker">color picker</Link></li>
         <li><Link to="cube">cube</Link></li>
+        <li><Link to="cone">cone</Link></li>
       </ul>
       <Outlet />
     </div>
