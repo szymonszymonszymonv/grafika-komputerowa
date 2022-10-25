@@ -37,11 +37,14 @@ function ColorPicker({}: Props) {
       return;
     }
     // calculate rgb
-    setColorR(255 * (1 - (colorC / 100)) * (1 - (colorK / 100)))
-    setColorG(255 * (1 - (colorM / 100)) * (1 - (colorK / 100)))
-    setColorB(255 * (1 - (colorY / 100)) * (1 - (colorK / 100)))
+    const r = 255 * (1 - (colorC / 100)) * (1 - (colorK / 100))
+    const g = 255 * (1 - (colorM / 100)) * (1 - (colorK / 100))
+    const b = 255 * (1 - (colorY / 100)) * (1 - (colorK / 100))
+    setColorR(r)
+    setColorG(g)
+    setColorB(b)
     // set final color
-    setFinalColorRGB(`rgb(${colorR}, ${colorG}, ${colorB})`)
+    setFinalColorRGB(`rgb(${r}, ${g}, ${b})`)
   }
 
   const onChangeRGB = () => {
