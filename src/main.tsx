@@ -10,6 +10,7 @@ import ColorPicker from "./components/ColorPicker";
 import Cube from "./components/Cube";
 import Cone from "./components/Cone";
 import Gk4 from "./pages/Gk-4";
+import Quality from "./components/Quality";
 
 const router = createBrowserRouter([
     {
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "polepszanie-jakosci",
-                        element: <></>
+                        element: <Quality></Quality>
                     }
                 ]
             }
