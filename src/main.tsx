@@ -9,6 +9,7 @@ import Gk3 from "./pages/Gk-3";
 import ColorPicker from "./components/ColorPicker";
 import Cube from "./components/Cube";
 import Cone from "./components/Cone";
+import Gk4 from "./pages/Gk-4";
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,20 @@ const router = createBrowserRouter([
                     },
                 ],
             },
+            {
+                path: "/gk-4",
+                element: <Gk4 />,
+                children: [
+                    {
+                        path: "przeksztalcenia-punktowe",
+                        element: <></>
+                    },
+                    {
+                        path: "polepszanie-jakosci",
+                        element: <></>
+                    }
+                ]
+            }
         ],
     },
 ]);
