@@ -11,6 +11,7 @@ import Cube from "./components/Cube";
 import Cone from "./components/Cone";
 import Gk4 from "./pages/Gk-4";
 import Quality from "./components/Quality";
+import PointOperations from "./components/PointOperations";
 
 const router = createBrowserRouter([
     {
@@ -49,14 +50,14 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "przeksztalcenia-punktowe",
-                        element: <></>
+                        element: <PointOperations></PointOperations>,
                     },
                     {
                         path: "polepszanie-jakosci",
-                        element: <Quality></Quality>
-                    }
-                ]
-            }
+                        element: <Quality></Quality>,
+                    },
+                ],
+            },
         ],
     },
 ]);
