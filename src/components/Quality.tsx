@@ -117,6 +117,58 @@ function Quality({}: Props) {
 
   }
 
+  const sobel = () => {
+    const canvas: HTMLCanvasElement = canvasRef.current!
+    const ctx = canvas.getContext('2d')
+    const bounding = canvas.getBoundingClientRect()
+    const imageData: ImageData = ctx?.getImageData(0, 0, bounding.width, bounding.height)!
+    // const adjacents = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
+    const adjacents = generateAdjacents(3)
+
+    const maskX = [
+      [-1, -2, -1],
+      [0, 0, 0],
+      [1, 2, 1]
+    ]
+    const maskY = [
+      [-1, 0, 1],
+      [-2, 0, 2],
+      [-1, 0, 1]
+    ]
+
+    let pixelsGrayscale: number[][][] = []
+    for(let i = 0; i < bounding.height; i++) {
+      pixelsGrayscale.push([])
+      for(let j = 0; j < bounding.width; j++) {
+        let r = pixelsDataMatrix[i][j][0]
+        let g = pixelsDataMatrix[i][j][1]
+        let b = pixelsDataMatrix[i][j][2]
+        let avg = (r + g + b) / 3
+        pixelsGrayscale[i].push([avg, avg, avg, 255])
+      }
+    }
+    for(let i = 0; i < bounding.height; i++) {
+      for(let j = 0; j < bounding.width; j++) {
+        let pixelX = 0
+        let pixelY = 0
+        for(let k = 0; k < adjacents.length; k++) {
+          if(i + adjacents[k][0] < 0 || i + adjacents[k][0] >= bounding.height || j + adjacents[k][1] < 0 || j + adjacents[k][1] >= bounding.width) {
+            continue
+          }
+          pixelX += maskX[Math.floor((k+1)/3)][k%3] * pixelsGrayscale[i+adjacents[k][0]][j+adjacents[k][1]][0]
+          pixelY += maskY[Math.floor((k+1)/3)][k%3] * pixelsGrayscale[i+adjacents[k][0]][j+adjacents[k][1]][0]
+        }
+        let gradientMagnitude = Math.sqrt((pixelX * pixelX) + (pixelY * pixelY))>>>0
+        imageData.data[(i * pixelsDataMatrix[i].length + j) * 4] = gradientMagnitude
+        imageData.data[(i * pixelsDataMatrix[i].length + j) * 4 + 1] = gradientMagnitude
+        imageData.data[(i * pixelsDataMatrix[i].length + j) * 4 + 2] = gradientMagnitude
+        imageData.data[(i * pixelsDataMatrix[i].length + j) * 4 + 3] = 255
+      }
+    }
+    ctx?.putImageData(imageData, 0, 0)
+    console.log(imageData)
+  }
+
   // init canvas
   useEffect(() => {
     const canvas: HTMLCanvasElement = canvasRef.current!
@@ -162,6 +214,7 @@ function Quality({}: Props) {
       <div>
         <button onClick={smooth}>smooth</button>
         <button onClick={median}>median</button>
+        <button onClick={sobel}>sobel</button>
       </div>
       <div>
         <canvas ref={canvasRef}></canvas>
