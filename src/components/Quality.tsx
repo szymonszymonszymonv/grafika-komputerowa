@@ -151,22 +151,55 @@ function Quality({}: Props) {
       for(let j = 0; j < bounding.width; j++) {
         let pixelX = 0
         let pixelY = 0
-        for(let k = 0; k < adjacents.length; k++) {
-          if(i + adjacents[k][0] < 0 || i + adjacents[k][0] >= bounding.height || j + adjacents[k][1] < 0 || j + adjacents[k][1] >= bounding.width) {
-            continue
+        // for(let k = 0; k < adjacents.length; k++) {
+        //   if(i + adjacents[k][0] < 0 || i + adjacents[k][0] >= bounding.height || j + adjacents[k][1] < 0 || j + adjacents[k][1] >= bounding.width) {
+        //     continue
+        //   }
+        //   pixelX += maskX[Math.floor((k+1)/3)][k%3] * pixelsGrayscale[i+adjacents[k][0]][j+adjacents[k][1]][0]
+        //   pixelY += maskY[Math.floor((k+1)/3)][k%3] * pixelsGrayscale[i+adjacents[k][0]][j+adjacents[k][1]][0]
+        // }
+
+        if(i > 0) {
+          pixelX += maskX[0][1] * pixelsGrayscale[i - 1][j][0] ?? 0
+          pixelY += maskY[0][1] * pixelsGrayscale[i - 1][j][0] ?? 0
+          if(j > 0) {
+            pixelX += maskX[0][0] * pixelsGrayscale[i - 1][j - 1][0] ?? 0
+            pixelY += maskY[0][0] * pixelsGrayscale[i - 1][j - 1][0] ?? 0
           }
-          pixelX += maskX[Math.floor((k+1)/3)][k%3] * pixelsGrayscale[i+adjacents[k][0]][j+adjacents[k][1]][0]
-          pixelY += maskY[Math.floor((k+1)/3)][k%3] * pixelsGrayscale[i+adjacents[k][0]][j+adjacents[k][1]][0]
+          if(j < bounding.width - 1) {
+            pixelX += maskX[0][2] * pixelsGrayscale[i - 1][j + 1][0] ?? 0
+            pixelY += maskY[0][2] * pixelsGrayscale[i - 1][j + 1][0] ?? 0 
+          }
         }
-        let gradientMagnitude = Math.sqrt((pixelX * pixelX) + (pixelY * pixelY))>>>0
-        imageData.data[(i * pixelsDataMatrix[i].length + j) * 4] = gradientMagnitude
+        if(j > 0) {
+          pixelX += maskX[1][0] * pixelsGrayscale[i][j - 1][0] ?? 0 
+          pixelY += maskY[1][0] * pixelsGrayscale[i][j - 1][0] ?? 0 
+        }
+        if(j < bounding.width - 1) {
+          pixelX += maskX[1][2] * pixelsGrayscale[i][j + 1][0] ?? 0 
+          pixelY += maskY[1][2] * pixelsGrayscale[i][j + 1][0] ?? 0 
+        }
+        if(i < bounding.height - 1) {
+          pixelX += maskX[2][1] * pixelsGrayscale[i + 1][j][0] ?? 0
+          pixelY += maskY[2][1] * pixelsGrayscale[i + 1][j][0] ?? 0
+          if(j > 0) {
+            pixelX += maskX[2][0] * pixelsGrayscale[i + 1][j - 1][0] ?? 0 
+            pixelY += maskY[2][0] * pixelsGrayscale[i + 1][j - 1][0] ?? 0 
+          }
+          if(j < bounding.width - 1) {
+            pixelX += maskX[2][2] * pixelsGrayscale[i + 1][j + 1][0] ?? 0 
+            pixelY += maskY[2][2] * pixelsGrayscale[i + 1][j + 1][0] ?? 0 
+          }
+        }
+
+        let gradientMagnitude = Math.sqrt((pixelX * pixelX) + (pixelY * pixelY))
+        imageData.data[(i * pixelsDataMatrix[i].length + j) * 4] =  gradientMagnitude
         imageData.data[(i * pixelsDataMatrix[i].length + j) * 4 + 1] = gradientMagnitude
         imageData.data[(i * pixelsDataMatrix[i].length + j) * 4 + 2] = gradientMagnitude
         imageData.data[(i * pixelsDataMatrix[i].length + j) * 4 + 3] = 255
       }
     }
     ctx?.putImageData(imageData, 0, 0)
-    console.log(imageData)
   }
 
   // init canvas

@@ -23,6 +23,9 @@ const App: React.FC = () => {
         <li>
           <Link to={"gk-4"}>gk-4</Link>
         </li>
+        <li>
+          <Link to={"gk-5"}>gk-5</Link>
+        </li>
       </ul>
       <Outlet></Outlet>
     </div>

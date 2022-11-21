@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, Route, createBrowserRouter } from "react-router-dom";
 import App from "./pages/App";
@@ -12,6 +12,9 @@ import Cone from "./components/Cone";
 import Gk4 from "./pages/Gk-4";
 import Quality from "./components/Quality";
 import PointOperations from "./components/PointOperations";
+import Gk5 from "./pages/Gk-5";
+import Histogram from "./components/Histogram";
+import Binarization from "./components/Binarization";
 
 const router = createBrowserRouter([
     {
@@ -58,6 +61,20 @@ const router = createBrowserRouter([
                     },
                 ],
             },
+            {
+                path: "/gk-5",
+                element: <Gk5 />,
+                children: [
+                    {
+                        path: "histogram",
+                        element: <Histogram />
+                    },
+                    {
+                        path: "binaryzacja",
+                        element: <Binarization />
+                    }
+                ]
+            }
         ],
     },
 ]);
