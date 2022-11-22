@@ -1,17 +1,22 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link, Outlet } from "react-router-dom";
 
-type Props = {}
+type Props = {};
 
 function Gk5({}: Props) {
-  return (
-    <div>
-      <ul>
-        <li><Link to="histogram">histogram</Link></li>
-        <li><Link to="binaryzacja">binaryzacja</Link></li>
-      </ul>
-    </div>
-  )
+    return (
+        <div>
+            <ul>
+                <li>
+                    <Link to="histogram">histogram</Link>
+                </li>
+                <li>
+                    <Link to="binaryzacja">binaryzacja</Link>
+                </li>
+            </ul>
+            <Outlet />
+        </div>
+    );
 }
 
-export default Gk5
+export default Gk5;

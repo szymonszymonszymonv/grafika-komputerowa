@@ -67,14 +67,14 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "histogram",
-                        element: <Histogram />
+                        element: <Histogram />,
                     },
                     {
                         path: "binaryzacja",
-                        element: <Binarization />
-                    }
-                ]
-            }
+                        element: <Binarization></Binarization>,
+                    },
+                ],
+            },
         ],
     },
 ]);
