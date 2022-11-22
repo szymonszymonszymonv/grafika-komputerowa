@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 
 type Props = {}
 
@@ -10,6 +10,7 @@ function Gk5({}: Props) {
         <li><Link to="histogram">histogram</Link></li>
         <li><Link to="binaryzacja">binaryzacja</Link></li>
       </ul>
+      <Outlet />
     </div>
   )
 }

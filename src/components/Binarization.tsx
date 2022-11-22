@@ -5,7 +5,7 @@ type Props = {}
 function Binarization({}: Props) {
   return (
     <div>
-      
+      haloxDDD
     </div>
   )
 }
