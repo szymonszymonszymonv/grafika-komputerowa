@@ -15,6 +15,7 @@ import PointOperations from "./components/PointOperations";
 import Gk5 from "./pages/Gk-5";
 import Histogram from "./components/Histogram";
 import Binarization from "./components/Binarization";
+import Gk7 from "./pages/Gk-7";
 
 const router = createBrowserRouter([
     {
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
                     },
                 ],
             },
+            {
+                path: "gk-7",
+                element: <Gk7 />
+            }
         ],
     },
 ]);
