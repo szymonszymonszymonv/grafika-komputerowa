@@ -16,6 +16,7 @@ import Gk5 from "./pages/Gk-5";
 import Histogram from "./components/Histogram";
 import Binarization from "./components/Binarization";
 import Gk7 from "./pages/Gk-7";
+import Gk6 from "./pages/Gk-6";
 
 const router = createBrowserRouter([
     {
@@ -77,9 +78,13 @@ const router = createBrowserRouter([
                 ],
             },
             {
+                path: "gk-6",
+                element: <Gk6 />,
+            },
+            {
                 path: "gk-7",
-                element: <Gk7 />
-            }
+                element: <Gk7 />,
+            },
         ],
     },
 ]);
