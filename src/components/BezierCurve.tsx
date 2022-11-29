@@ -77,6 +77,12 @@ function BezierCurve({}: Props) {
 
             setPrevPoint(pointFounded);
             setIsMoving(true);
+        } else {
+            // if red point is not clicked then we can add new point by mouse click
+            setPointsTable((prev) => [
+                ...prev,
+                { x: startX.current, y: startY.current },
+            ]);
         }
     };
 
@@ -140,7 +146,6 @@ function BezierCurve({}: Props) {
         ctx?.moveTo(pointsTable[0].x, pointsTable[0].y);
         let n = pointsTable.length;
 
-        let curvepoints = [];
         for (let u = 0; u <= 1; u += 0.0001) {
             let p = { x: 0, y: 0 };
 
@@ -148,8 +153,6 @@ function BezierCurve({}: Props) {
                 let newton = countNewton(n - 1, i);
                 let ti = Math.pow(u, i);
                 let lti = Math.pow(1 - u, n - 1 - i);
-
-                // let B = countNewton(n - 1, i) * Math.pow(1 - u, n - 1 - i) * Math.pow(u, i);
                 let xPoint = newton * ti * lti * pointsTable[i].x;
                 let yPoint = newton * ti * lti * pointsTable[i].y;
 
@@ -157,7 +160,6 @@ function BezierCurve({}: Props) {
                 p.y += yPoint;
             }
 
-            curvepoints.push(p);
             ctx!.lineTo(p.x, p.y);
         }
         ctx?.stroke();
@@ -166,8 +168,6 @@ function BezierCurve({}: Props) {
             ctx!.fillStyle = "Red";
             ctx?.fillRect(pointsTable[i].x, pointsTable[i].y, 6, 6);
         }
-
-        return curvepoints;
     };
 
     return (
@@ -187,7 +187,7 @@ function BezierCurve({}: Props) {
                     placeholder="y"
                     onChange={(e) => setPY(parseInt(e.target.value))}
                 />
-                <button onClick={addPoint}>klik</button>
+                <button onClick={addPoint}>Add point</button>
             </div>
 
             <div>
