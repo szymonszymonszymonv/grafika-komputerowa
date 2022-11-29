@@ -72,12 +72,15 @@ function Transform2D({}: Props) {
       copyShapes[copyShapes.indexOf(activeShape!)] = newShape
     }
     ctx.clearRect(0, 0, 800, 600) 
+    if(draggingX && draggingY) {
+      ctx.fillRect(draggingX, draggingY, 5, 5)
+    }
     for(let shape of copyShapes) {
-      let pointsLen = shape.points.length
+      let pointsLen = shape?.points.length
       for(let i = 0, j = pointsLen - 1; i < pointsLen; j = i++) {
         ctx.beginPath()
-        ctx.moveTo(shape.points[i].x, shape.points[i].y)
-        ctx.lineTo(shape.points[j].x, shape.points[j].y)
+        ctx.moveTo(shape?.points[i].x, shape?.points[i].y)
+        ctx.lineTo(shape?.points[j].x, shape?.points[j].y)
         ctx.stroke()        
       }
     }
@@ -89,8 +92,8 @@ function Transform2D({}: Props) {
     setShapes(copyShapes)
     setModifiedShape(null)
     setIsMoving(false)
-    setDraggingX(0)
-    setDraggingY(0)
+    // setDraggingX(0)
+    // setDraggingY(0)
     setActiveShape(null)
     // draw(e)
   }
@@ -135,7 +138,7 @@ function Transform2D({}: Props) {
       canvas.removeEventListener('mousemove', onMouseMove)
     }
   }, [draggingX, draggingY])
-
+  
   useEffect(() => {
     const canvas: HTMLCanvasElement = canvasRef.current!
     const onMouseDown = (e: MouseEvent) => getBoundingShape(e)
@@ -143,12 +146,10 @@ function Transform2D({}: Props) {
     const onMouseUp = (e: MouseEvent) => stopDrawing(e)
     canvas.addEventListener('mousedown', onMouseDown)
     canvas.addEventListener('mouseup', onMouseUp)
-    // canvas.addEventListener('mousemove', onMouseMove)
 
     return () => {
       canvas.removeEventListener('mousedown', onMouseDown)
       canvas.removeEventListener('mouseup', onMouseUp)
-    // canvas.removeEventListener('mousemove', onMouseMove)
   }
     // const onMouseUp = (e: MouseEvent) => endDrawing()
   }, [shapes, points, activeShape, isMoving, draggingX, draggingY, modifiedShape]);
