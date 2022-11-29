@@ -23,6 +23,8 @@ function Transform2D({}: Props) {
   const [draggingY, setDraggingY] = useState(0)
   const [vectorX, setVectorX] = useState(0)
   const [vectorY, setVectorY] = useState(0)
+  const [inputVectorX, setInputVectorX] = useState(0)
+  const [inputVectorY, setInputVectorY] = useState(0)
   const [points, setPoints] = useState<Point[]>([])
   const [shapes, setShapes] = useState<Shape[]>([])
   const [isMoving, setIsMoving] = useState(false)
@@ -41,7 +43,6 @@ function Transform2D({}: Props) {
     const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!
     let mouseX = e.clientX - canvas.offsetLeft
     let mouseY = e.clientY - canvas.offsetTop
-    console.log(mouseX, mouseY)
     let intersects = false
     let boundingShape = null
 
@@ -61,6 +62,21 @@ function Transform2D({}: Props) {
         return
       }
     }
+  }
+
+  const move = () => {
+    let newPoints: Point[] = activeShape?.points.map(point => { return {x: point.x + inputVectorX, y: point.y + inputVectorY} as Point })!
+    let newShape = new Shape(newPoints)
+    let copyShapes = [...shapes]
+    if(newShape) {
+      // replace activeShape with newShape
+      copyShapes[copyShapes.indexOf(activeShape!)] = newShape
+    }
+    setShapes(copyShapes)
+    setModifiedShape(newShape)
+    setActiveShape(newShape)
+    draw(newShape)
+
   }
 
   const draw = (newShape: Shape | null = modifiedShape) => {
@@ -92,14 +108,14 @@ function Transform2D({}: Props) {
     setShapes(copyShapes)
     setModifiedShape(null)
     setIsMoving(false)
+    setActiveShape(modifiedShape)
     // setDraggingX(0)
     // setDraggingY(0)
-    setActiveShape(null)
     // draw(e)
   }
 
   const calculateVector = (e: MouseEvent) => {
-    console.log(draggingX, draggingY)
+    if(!isMoving) { return }
     const canvas: HTMLCanvasElement = canvasRef.current!
     const newX = e!.clientX - canvas.offsetLeft
     const newY = e!.clientY - canvas.offsetTop
@@ -123,7 +139,6 @@ function Transform2D({}: Props) {
   useEffect(() => {
     const canvas: HTMLCanvasElement = canvasRef.current!
     if(!isMoving) { return }
-    console.log(vectorX, vectorY)
     let newPoints: Point[] = activeShape?.points.map(point => { return {x: point.x + vectorX, y: point.y + vectorY} as Point })!
     let newShape = new Shape(newPoints)
     setModifiedShape(newShape)
@@ -161,11 +176,16 @@ function Transform2D({}: Props) {
         <input placeholder='x' onChange={(e) => setPointX(parseInt(e.target.value))}></input>
         <input placeholder='y' onChange={(e) => setPointY(parseInt(e.target.value))}></input>
       </div>
+      <div>Move</div>
+      <div>
+        <input placeholder="vector x" onChange={(e) => setInputVectorX(parseInt(e.target.value))}></input>
+        <input placeholder="vector y" onChange={(e) => setInputVectorY(parseInt(e.target.value))}></input>
+        <button onClick={() => move()}>Move</button>
+      </div>
       <div>
         <button onClick={() => setPoints([...points, {x: pointX, y: pointY}])}>Add point</button>
         <button onClick={() => onAddShape()}>Draw shape</button>
       </div>
-      {JSON.stringify(points)}
       <div>
         <canvas ref={canvasRef}></canvas>
       </div>
