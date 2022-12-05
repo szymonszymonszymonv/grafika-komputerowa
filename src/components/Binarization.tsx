@@ -221,7 +221,7 @@ function Binarization({}: Props) {
                 ></input>
             </div>
             <div>
-                haloxDDD<canvas ref={canvasRef}></canvas>
+                <canvas ref={canvasRef}></canvas>
             </div>
         </>
     );
