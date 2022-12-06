@@ -18,6 +18,7 @@ import Binarization from "./components/Binarization";
 import Gk7 from "./pages/Gk-7";
 import Gk6 from "./pages/Gk-6";
 import Gk8 from "./pages/Gk-8";
+import Gk9 from "./pages/Gk-9";
 
 const router = createBrowserRouter([
     {
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
             {
                 path: "gk-8",
                 element: <Gk8 />
+            },
+            {
+                path: "gk-9",
+                element: <Gk9 />
             },
         ],
     },

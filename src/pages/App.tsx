@@ -39,7 +39,10 @@ const App: React.FC = () => {
                     <Link to={"gk-7"}>gk-7</Link>
                 </li>
                 <li>
-                  <Link to={"gk-8"}>gk-8</Link>
+                    <Link to={"gk-8"}>gk-8</Link>
+                </li>
+                <li>
+                    <Link to={"gk-9"}>gk-9</Link>
                 </li>
             </ul>
             <Outlet></Outlet>
