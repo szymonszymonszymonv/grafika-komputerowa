@@ -19,6 +19,9 @@ function Transform2D({}: Props) {
   const canvasRef = useRef(null)
   const [pointX, setPointX] = useState(0)
   const [pointY, setPointY] = useState(0)
+  const [scaleX, setScaleX] = useState(0)
+  const [scaleY, setScaleY] = useState(0)
+  const [rotateAngle, setRotateAngle] = useState(0)
   const [draggingX, setDraggingX] = useState(0)
   const [draggingY, setDraggingY] = useState(0)
   const [vectorX, setVectorX] = useState(0)
@@ -38,13 +41,56 @@ function Transform2D({}: Props) {
     // draw(null)
   }
 
+  const onScaleShape = () => {
+    console.log(activeShape)
+    console.log(shapes)
+    let newPoints: Point[] = []
+    for(let point of activeShape!.points) {
+      console.log(`shape points: ${point.x}, ${point.y}`)
+      console.log(scaleX, scaleY)
+      console.log(`dragging points: ${draggingX}, ${draggingY}`)
+      const newX = draggingX + (point.x - draggingX) * scaleX
+      const newY = draggingY + (point.y - draggingY) * scaleY
+      console.log(`pushing point: x:${newX}, y:${newY}`)
+      newPoints.push({x: newX, y: newY})
+    }
+    const newShape = new Shape([...newPoints])
+    console.log(newShape)
+    let copyShapes = [...shapes]
+    copyShapes[copyShapes.indexOf(activeShape!)] = newShape!
+    setModifiedShape(newShape)
+    setShapes(copyShapes)
+    draw(newShape)
+  }
+
+  const onRotateShape = () => {
+    let newPoints: Point[] = []
+    let radians = rotateAngle * Math.PI / 180
+    for(let point of activeShape!.points) {
+      const newX = draggingX + (point.x - draggingX) * Math.cos(radians) - (point.y - draggingY) * Math.sin(radians)
+      const newY = draggingY + (point.x - draggingX) * Math.sin(radians) + (point.y - draggingY) * Math.cos(radians)
+      newPoints.push({x: newX, y: newY})
+    }
+    const newShape = new Shape([...newPoints])
+    console.log(newShape)
+    let copyShapes = [...shapes]
+    copyShapes[copyShapes.indexOf(activeShape!)] = newShape!
+    setModifiedShape(newShape)
+    setShapes(copyShapes)
+    draw(newShape)
+  }
+
   const getBoundingShape = (e: MouseEvent) => {
+    console.log('xD')
     const canvas: HTMLCanvasElement = canvasRef.current!
     const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!
-    let mouseX = e.clientX - canvas.offsetLeft
-    let mouseY = e.clientY - canvas.offsetTop
+    console.log(canvas.offsetTop)
+    console.log(canvas.offsetLeft)
+    let mouseX = e.offsetX - canvas.offsetLeft
+    let mouseY = e.offsetY
     let intersects = false
     let boundingShape = null
+    console.log(`${mouseX}, ${mouseY}`)
 
     for(let shape of shapes) {
       let pointsLen = shape.points.length
@@ -55,6 +101,7 @@ function Transform2D({}: Props) {
           }
       }
       if(intersects) { 
+        console.log(shape)
         setActiveShape(shape)
         setDraggingX(mouseX)
         setDraggingY(mouseY)
@@ -115,10 +162,9 @@ function Transform2D({}: Props) {
   }
 
   const calculateVector = (e: MouseEvent) => {
-    if(!isMoving) { return }
     const canvas: HTMLCanvasElement = canvasRef.current!
     const newX = e!.clientX - canvas.offsetLeft
-    const newY = e!.clientY - canvas.offsetTop
+    const newY = e!.offsetY
     setVectorX(newX - draggingX)
     setVectorY(newY - draggingY) 
     // setDraggingX(newX)
@@ -186,9 +232,26 @@ function Transform2D({}: Props) {
         <button onClick={() => setPoints([...points, {x: pointX, y: pointY}])}>Add point</button>
         <button onClick={() => onAddShape()}>Draw shape</button>
       </div>
+      <div>Scale</div>
+      <div>
+        <input placeholder='scale x' onChange={(e) => setScaleX(parseFloat(e.target.value))}></input>
+        <input placeholder='scale y' onChange={(e) => setScaleY(parseFloat(e.target.value))}></input>
+      </div>
+      <div>
+        <button onClick={() => onScaleShape()}>Scale shape</button>
+      </div>
+      <div>Rotate</div>
+      <div>
+        <input placeholder='angle' onChange={(e) => setRotateAngle(parseInt(e.target.value))}></input>
+      </div>
+      <div>
+        <button onClick={() => onRotateShape()}>Rotate shape</button>
+      </div>
+      {JSON.stringify(points)}
       <div>
         <canvas ref={canvasRef}></canvas>
       </div>
+
     </div>
   )
 }
