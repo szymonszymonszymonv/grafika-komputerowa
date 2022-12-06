@@ -26,6 +26,8 @@ function Transform2D({}: Props) {
   const [draggingY, setDraggingY] = useState(0)
   const [vectorX, setVectorX] = useState(0)
   const [vectorY, setVectorY] = useState(0)
+  const [inputVectorX, setInputVectorX] = useState(0)
+  const [inputVectorY, setInputVectorY] = useState(0)
   const [points, setPoints] = useState<Point[]>([])
   const [shapes, setShapes] = useState<Shape[]>([])
   const [isMoving, setIsMoving] = useState(false)
@@ -79,13 +81,16 @@ function Transform2D({}: Props) {
   }
 
   const getBoundingShape = (e: MouseEvent) => {
+    console.log('xD')
     const canvas: HTMLCanvasElement = canvasRef.current!
     const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!
-    let mouseX = e.clientX - canvas.offsetLeft
-    let mouseY = e.clientY - canvas.offsetTop
-    console.log(mouseX, mouseY)
+    console.log(canvas.offsetTop)
+    console.log(canvas.offsetLeft)
+    let mouseX = e.offsetX - canvas.offsetLeft
+    let mouseY = e.offsetY
     let intersects = false
     let boundingShape = null
+    console.log(`${mouseX}, ${mouseY}`)
 
     for(let shape of shapes) {
       let pointsLen = shape.points.length
@@ -96,6 +101,7 @@ function Transform2D({}: Props) {
           }
       }
       if(intersects) { 
+        console.log(shape)
         setActiveShape(shape)
         setDraggingX(mouseX)
         setDraggingY(mouseY)
@@ -103,6 +109,21 @@ function Transform2D({}: Props) {
         return
       }
     }
+  }
+
+  const move = () => {
+    let newPoints: Point[] = activeShape?.points.map(point => { return {x: point.x + inputVectorX, y: point.y + inputVectorY} as Point })!
+    let newShape = new Shape(newPoints)
+    let copyShapes = [...shapes]
+    if(newShape) {
+      // replace activeShape with newShape
+      copyShapes[copyShapes.indexOf(activeShape!)] = newShape
+    }
+    setShapes(copyShapes)
+    setModifiedShape(newShape)
+    setActiveShape(newShape)
+    draw(newShape)
+
   }
 
   const draw = (newShape: Shape | null = modifiedShape) => {
@@ -134,16 +155,16 @@ function Transform2D({}: Props) {
     setShapes(copyShapes)
     setModifiedShape(null)
     setIsMoving(false)
+    setActiveShape(modifiedShape)
     // setDraggingX(0)
     // setDraggingY(0)
-    setActiveShape(modifiedShape)
     // draw(e)
   }
 
   const calculateVector = (e: MouseEvent) => {
     const canvas: HTMLCanvasElement = canvasRef.current!
     const newX = e!.clientX - canvas.offsetLeft
-    const newY = e!.clientY - canvas.offsetTop
+    const newY = e!.offsetY
     setVectorX(newX - draggingX)
     setVectorY(newY - draggingY) 
     // setDraggingX(newX)
@@ -164,7 +185,6 @@ function Transform2D({}: Props) {
   useEffect(() => {
     const canvas: HTMLCanvasElement = canvasRef.current!
     if(!isMoving) { return }
-    console.log(vectorX, vectorY)
     let newPoints: Point[] = activeShape?.points.map(point => { return {x: point.x + vectorX, y: point.y + vectorY} as Point })!
     let newShape = new Shape(newPoints)
     setModifiedShape(newShape)
@@ -201,6 +221,12 @@ function Transform2D({}: Props) {
       <div>
         <input placeholder='x' onChange={(e) => setPointX(parseInt(e.target.value))}></input>
         <input placeholder='y' onChange={(e) => setPointY(parseInt(e.target.value))}></input>
+      </div>
+      <div>Move</div>
+      <div>
+        <input placeholder="vector x" onChange={(e) => setInputVectorX(parseInt(e.target.value))}></input>
+        <input placeholder="vector y" onChange={(e) => setInputVectorY(parseInt(e.target.value))}></input>
+        <button onClick={() => move()}>Move</button>
       </div>
       <div>
         <button onClick={() => setPoints([...points, {x: pointX, y: pointY}])}>Add point</button>
